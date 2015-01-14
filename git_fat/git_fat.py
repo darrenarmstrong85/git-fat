@@ -391,16 +391,14 @@ class RSyncBackend(BackendInterface):
             raise OSError('Error running "%s"' % " ".join(rsync))
 
         p.communicate(input='\x00'.join(file_list))
-        # TODO: fix for success check
-        return True
+        return p.returncode == 0
 
     def push_files(self, file_list):
         rsync = self._rsync(push=True)
         logger.debug("rsync push command: {}".format(" ".join(rsync)))
         p = sub.Popen(rsync, stdin=sub.PIPE)
         p.communicate(input='\x00'.join(file_list))
-        # TODO: fix for success check
-        return True
+        return p.returncode == 0
 
 
 BACKEND_MAP = {
